@@ -1,0 +1,13 @@
+﻿  GraphOrNet.cpp
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(13,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(14,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(71,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(137,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(158,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(280,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(309,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(322,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(331,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(359,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\USER\source\repos\Professor'sRete\Professor'sRete\GraphOrNet.cpp(378,20): warning C4018: '<': signed/unsigned mismatch
+  Professor'sRete.vcxproj -> C:\Users\USER\source\repos\Professor'sRete\Debug\Professor'sRete.exe

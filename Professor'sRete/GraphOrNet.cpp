@@ -17,20 +17,37 @@ vector<int> GraphOrNet::findMatch(WMSet temp_wm)
 				alphaList[j].testAlphaAndSaveHere(temp_wm.data_content[i].second);
 				//activate the beta
 				//searching all pair and activate it
-				if (alphaList[j].betaPair->leftSourceBool == false)
-					alphaList[j].betaPair->leftSourceBool = true;
-				else
-					alphaList[j].betaPair->rightSourceBool = true;
+				for (int k = 0; k < alphaList[j].listOfBetaPairs.size(); k++) {
+					if (alphaList[j].listOfBetaPairs[k]->leftSourceBool == false)
+						alphaList[j].listOfBetaPairs[k]->leftSourceBool = true;
+					else
+						alphaList[j].listOfBetaPairs[k]->rightSourceBool = true;
 
-				if (alphaList[j].betaPair->leftSourceBool && alphaList[j].betaPair->rightSourceBool) {
-					int lAlpha = -1, rAlpha = -1;
-					//find left alpha
-					lAlpha = findAlpha(alphaList[j].betaPair->leftSource);
-					//find right alpha
-					rAlpha = findAlpha(alphaList[j].betaPair->rightSource);
-					//test beta Node
-					alphaList[j].betaPair->testBetaNode(alphaList[lAlpha].testRes, alphaList[rAlpha].testRes);
+					if (alphaList[j].listOfBetaPairs[k]->leftSourceBool
+						&& alphaList[j].listOfBetaPairs[k]->rightSourceBool) {
+						int lAlpha = -1, rAlpha = -1;
+						//find left alpha
+						lAlpha = findAlpha(alphaList[j].listOfBetaPairs[k]->leftSource);
+						//find right alpha
+						rAlpha = findAlpha(alphaList[j].listOfBetaPairs[k]->rightSource);
+						//test beta Node
+						alphaList[j].listOfBetaPairs[k]->testBetaNode(alphaList[lAlpha].testRes, alphaList[rAlpha].testRes);
+					}
 				}
+
+				//if (alphaList[j].betaPair->leftSourceBool == false)
+				//	alphaList[j].betaPair->leftSourceBool = true;
+				//else
+				//	alphaList[j].betaPair->rightSourceBool = true;
+				//if (alphaList[j].betaPair->leftSourceBool && alphaList[j].betaPair->rightSourceBool) {
+				//	int lAlpha = -1, rAlpha = -1;
+				//	//find left alpha
+				//	lAlpha = findAlpha(alphaList[j].betaPair->leftSource);
+				//	//find right alpha
+				//	rAlpha = findAlpha(alphaList[j].betaPair->rightSource);
+				//	//test beta Node
+				//	alphaList[j].betaPair->testBetaNode(alphaList[lAlpha].testRes, alphaList[rAlpha].testRes);
+				//}
 
 				/*
 				for (int k = 0; k < adjAlphaBeta.size(); k++) {
@@ -70,33 +87,64 @@ vector<int> GraphOrNet::findMatch(WMSet temp_wm)
 	// due to time, i just make for loop
 	for (int i = 0; i < betaList.size(); i++) {
 
-		if (betaList[i].betaPair->leftSourceBool == false)
+		for (int j = 0; j < betaList[i].listOfBetaPair.size(); j++) {
+			if (betaList[i].listOfBetaPair[j]->leftSourceBool == false)
+				betaList[i].listOfBetaPair[j]->leftSourceBool = true;
+			else
+				betaList[i].listOfBetaPair[j]->rightSourceBool = true;
+
+			if (betaList[i].listOfBetaPair[j]->leftSourceBool
+				&& betaList[i].listOfBetaPair[j]->rightSourceBool
+				&& betaList[i].listOfBetaPair[j]->testRes.empty()) {
+
+				int lAlpha = -1;
+				int lBeta = -1, rBeta = -1;
+				//if alpha is on left or right
+				lAlpha = findAlpha(betaList[i].listOfBetaPair[j]->leftSource);
+				if (lAlpha == -1)
+					lAlpha = findAlpha(betaList[i].listOfBetaPair[j]->rightSource);
+				//find right or right beta
+				lBeta = findBetaBasedOnProduct(betaList[i].listOfBetaPair[j]->leftSource);
+				rBeta = findBetaBasedOnProduct(betaList[i].listOfBetaPair[j]->rightSource);
+
+				//test beta Node
+				//if left or right node is from alpha
+				if (lAlpha != -1 && lBeta != -1)
+					betaList[i].listOfBetaPair[j]->testBetaNode(betaList[lBeta].testRes, alphaList[lAlpha].testRes);
+				else if (lAlpha != -1 && rBeta != -1)
+					betaList[i].listOfBetaPair[j]->testBetaNode(betaList[rBeta].testRes, alphaList[lAlpha].testRes);
+				//if both from beta node
+				if (lBeta != -1 && rBeta != -1)
+					betaList[i].listOfBetaPair[j]->testBetaNode(betaList[rBeta].testRes, betaList[lBeta].testRes);
+			}
+		}
+		/*if (betaList[i].betaPair->leftSourceBool == false)
 			betaList[i].betaPair->leftSourceBool = true;
 		else
-			betaList[i].betaPair->rightSourceBool = true;
+			betaList[i].betaPair->rightSourceBool = true;*/
 
-		if (betaList[i].betaPair->leftSourceBool && betaList[i].betaPair->rightSourceBool
-			&& betaList[i].betaPair->testRes.empty()) {
-			int lAlpha = -1;
-			int lBeta = -1, rBeta = -1;
-			//if alpha is on left or right
-			lAlpha = findAlpha(betaList[i].betaPair->leftSource);
-			if (lAlpha == -1)
-				lAlpha = findAlpha(betaList[i].betaPair->rightSource);
-			//find right or right beta
-			lBeta = findBetaBasedOnProduct(betaList[i].betaPair->leftSource);
-			rBeta = findBetaBasedOnProduct(betaList[i].betaPair->rightSource);
+		//if (betaList[i].betaPair->leftSourceBool && betaList[i].betaPair->rightSourceBool
+		//	&& betaList[i].betaPair->testRes.empty()) {
+		//	int lAlpha = -1;
+		//	int lBeta = -1, rBeta = -1;
+		//	//if alpha is on left or right
+		//	lAlpha = findAlpha(betaList[i].betaPair->leftSource);
+		//	if (lAlpha == -1)
+		//		lAlpha = findAlpha(betaList[i].betaPair->rightSource);
+		//	//find right or right beta
+		//	lBeta = findBetaBasedOnProduct(betaList[i].betaPair->leftSource);
+		//	rBeta = findBetaBasedOnProduct(betaList[i].betaPair->rightSource);
 
-			//test beta Node
-			//if left or right node is from alpha
-			if (lAlpha != -1 && lBeta != -1)
-				betaList[i].betaPair->testBetaNode(betaList[lBeta].testRes, alphaList[lAlpha].testRes);
-			else if (lAlpha != -1 && rBeta != -1)
-				betaList[i].betaPair->testBetaNode(betaList[rBeta].testRes, alphaList[lAlpha].testRes);
-			//if both from beta node
-			if (lBeta != -1 && rBeta != -1)
-				betaList[i].betaPair->testBetaNode(betaList[rBeta].testRes, betaList[lBeta].testRes);
-		}
+		//	//test beta Node
+		//	//if left or right node is from alpha
+		//	if (lAlpha != -1 && lBeta != -1)
+		//		betaList[i].betaPair->testBetaNode(betaList[lBeta].testRes, alphaList[lAlpha].testRes);
+		//	else if (lAlpha != -1 && rBeta != -1)
+		//		betaList[i].betaPair->testBetaNode(betaList[rBeta].testRes, alphaList[lAlpha].testRes);
+		//	//if both from beta node
+		//	if (lBeta != -1 && rBeta != -1)
+		//		betaList[i].betaPair->testBetaNode(betaList[rBeta].testRes, betaList[lBeta].testRes);
+		//}
 		break;
 
 		//for (int j = 0; j < adjBetaBeta.size(); j++) {
@@ -210,6 +258,25 @@ int GraphOrNet::addTerminal(string terminalName)
 	return 0;
 }
 
+AlphaNode GraphOrNet::addAlphaAndReturn(string condition)
+{
+	int id = alphaList.size();
+
+	AlphaNode alp(id, condition);
+	alphaList.push_back(alp);
+	
+	return alp;
+}
+
+BetaNode GraphOrNet::addBetaAndReturn(string condition)
+{
+	int id = betaList.size();
+
+	BetaNode bet(id, condition);
+	betaList.push_back(bet);
+	return bet;
+}
+
 //int GraphOrNet::connectOneToOneNode(Node n1, Node n2)
 //{
 //	adjListGeneral.push_back({ n1, n2 });
@@ -237,6 +304,9 @@ int GraphOrNet::connectTwoInputNode(AlphaNode &a1, AlphaNode &a2, BetaNode &b1)
 	//adjAlphaBeta.push_back({ &a1, &b1 });
 	//adjAlphaBeta.push_back({ &a2, &b1 });
 
+	a1.addBetaPair(&b1);
+	a2.addBetaPair(&b1);
+
 	a1.betaPair = &b1;
 	a2.betaPair = &b1;
 
@@ -247,6 +317,9 @@ int GraphOrNet::connectTwoInputNode(BetaNode &b1, AlphaNode &a2, BetaNode &b2)
 {
 	//adjAlphaBeta.push_back({ &a2, &b2 });
 	//adjBetaBeta.push_back({ &b1, &b2 });
+
+	b1.addBetaPair(&b2);
+	a2.addBetaPair(&b2);
 
 	//Back to linked list
 	a2.betaPair = &b2;
@@ -259,6 +332,9 @@ int GraphOrNet::connectTwoInputNode(BetaNode &b1, BetaNode &b2, BetaNode &b3)
 {
 	//adjBetaBeta.push_back({ &b1, &b3 });
 	//adjBetaBeta.push_back({ &b2, &b3 });
+
+	b1.addBetaPair(&b3);
+	b2.addBetaPair(&b3);
 
 	b1.betaPair = &b3;
 	b2.betaPair = &b3;

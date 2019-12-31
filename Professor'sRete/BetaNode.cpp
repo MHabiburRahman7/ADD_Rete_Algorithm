@@ -81,9 +81,39 @@ int BetaNode::testBetaNode(vector<pair<int, string>> WME, vector<pair<int, strin
 	return 0;
 }
 
+int BetaNode::addBetaPair(BetaNode* pair)
+{
+	int isExist = checkBeta(pair);
+	if (isExist == 1)
+		return 1;
+	else {
+		listOfBetaPair.push_back(pair);
+		return 1;
+	}
+
+	return -1;
+}
+
+int BetaNode::checkBeta(BetaNode* pair)
+{
+	for (int i = 0; i < listOfBetaPair.size(); i++) {
+		if (listOfBetaPair[i] == pair)
+			return 1;
+	}
+	return 0;
+}
+
 int BetaNode::ClearConnection()
 {
 	betaPair = NULL;
 	terminalPair = NULL;
 	return 1;
+}
+
+int BetaNode::ResetNode()
+{
+	ClearConnection();
+	testRes = {};
+	listOfBetaPair = {};
+	return 0;
 }

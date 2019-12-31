@@ -31,3 +31,34 @@ speed 1 22142
 speed 2 22121
 2
 7
+
+10
+if distance < 10000 and elevation < 12000 then danger_obj
+10
+if danger_obj and speed > 20000 then alert_object
+10
+if alert_object then alert_terminal
+6
+1
+distance 0 9800
+1
+distance 1 9780
+1
+distance 2 9760
+1
+elevation 0 11000
+1
+elevation 1 11900
+1
+elevation 2 11990
+1
+speed 0 22000
+1
+speed 1 22142
+1
+speed 2 22121
+2
+7
+
+
+IF DIS < 100 AND ELEVA > 90 AND CONSI >= 10 THEN DANGERVERY //not allowed

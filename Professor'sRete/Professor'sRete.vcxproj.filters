@@ -39,6 +39,9 @@
     <ClCompile Include="..\..\Professor%27sRete\Professor%27sRete\TerminalNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Professor%27sRete\Professor%27sRete\Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Professor%27sRete\Professor%27sRete\Node.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Professor%27sRete\Professor%27sRete\TerminalNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Professor%27sRete\Professor%27sRete\Utilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

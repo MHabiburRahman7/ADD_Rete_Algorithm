@@ -131,6 +131,7 @@
     <ClCompile Include="..\..\Professor%27sRete\Professor%27sRete\Main.cpp" />
     <ClCompile Include="..\..\Professor%27sRete\Professor%27sRete\Node.cpp" />
     <ClCompile Include="..\..\Professor%27sRete\Professor%27sRete\TerminalNode.cpp" />
+    <ClCompile Include="..\..\Professor%27sRete\Professor%27sRete\Utilities.cpp" />
     <ClCompile Include="..\..\Professor%27sRete\Professor%27sRete\WMSet.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +141,7 @@
     <ClInclude Include="..\..\Professor%27sRete\Professor%27sRete\GraphOrNet.h" />
     <ClInclude Include="..\..\Professor%27sRete\Professor%27sRete\Node.h" />
     <ClInclude Include="..\..\Professor%27sRete\Professor%27sRete\TerminalNode.h" />
+    <ClInclude Include="..\..\Professor%27sRete\Professor%27sRete\Utilities.h" />
     <ClInclude Include="..\..\Professor%27sRete\Professor%27sRete\WMSet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

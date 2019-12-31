@@ -22,6 +22,7 @@ public:
 	//Connected to beta and terminal what
 	BetaNode* betaPair;
 	TerminalNode* terminalPair;
+	vector<BetaNode *> listOfBetaPair;
 
 	bool leftSourceBool = false, rightSourceBool= false;
 
@@ -33,6 +34,10 @@ public:
 	int testBetaNode(vector<pair<int, string>> WME, vector<pair<int, int>> WME1);
 	//if both are beta nodes
 	int testBetaNode(vector<pair<int, string>> WME, vector<pair<int, string>> WME1);
+
+	//connecting beta & terminal
+	int addBetaPair(BetaNode* pair);
+	int checkBeta(BetaNode* pair);
 
 	//Init function
 	int ClearConnection();

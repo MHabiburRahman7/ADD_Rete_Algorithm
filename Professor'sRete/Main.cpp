@@ -2,6 +2,7 @@
 #include <string>
 #include "WMSet.h"
 #include "GraphOrNet.h"
+#include "Utilities.h"
 
 using namespace std;
 
@@ -11,10 +12,11 @@ int main() {
 	int select;
 	WMSet now_wm;
 	GraphOrNet now_graph;
+	Utilities util;
 
 	cout << "select what you want " << endl;
 	cin >> select;
-	while (select <= 10) {
+	while (select <= 20) {
 		switch (select){
 			//input WME
 			case 1: {
@@ -84,6 +86,66 @@ int main() {
 			case 9: {
 				cout << "Fire the Working Memory " << endl;
 				now_graph.tempFireWME(now_wm);
+				break;
+			}
+			case 10: {
+				string temp, finalTerm;
+
+				vector<pair<string, string>> made;
+				cout << "Test the tokenizer " << endl;
+				cin.ignore();
+				getline(cin, temp);
+
+				made = util.tokenize(temp);
+				/*for (int i = 0; i < made.size(); i++) {
+					cout << made[i].first << " -- " << made[i].second << endl;
+				}
+				cout << endl;*/
+
+				char* token;
+				char* str = (char*)malloc(100);
+
+				//This belong to beta and terminal
+				if (made.size() == 2) {
+					for (int i = 0; i < made.size(); i++) {
+						//beta node
+						if (i == 0) {
+							finalTerm += made[i].second;
+							finalTerm += " then ";
+						}
+						else {
+							finalTerm += made[i].second;
+						}
+						//terminal node
+					}
+
+					now_graph.addTerminal(finalTerm);
+
+					int a;
+				}
+				//This belong to alpha-beta or beta-beta
+				else if (made.size() > 2) {
+					for (int i = 0; i < made.size(); i++) {
+						if (made[i].first == "Alpha") {
+							now_graph.addAlpha(made[i].second);
+						}
+						strcpy(str, made[i].second.c_str());
+						token = strtok(str, " ");
+						if (i == 0) {
+							finalTerm += token;
+							finalTerm += " and ";
+						}
+						else if (i == 1) {
+							finalTerm += token;
+							finalTerm += " then ";
+						}
+						else if (i == 2)
+							finalTerm += token;
+					}
+
+					now_graph.addBeta(finalTerm);
+				}
+				
 				break;
 			}
 			default: {

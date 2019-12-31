@@ -45,6 +45,28 @@ string AlphaNode::getAlphaDataType()
 	return thisDataType;
 }
 
+int AlphaNode::checkExistPair(BetaNode * pairs)
+{
+	for (int i = 0; i < listOfBetaPairs.size(); i++) {
+		if (listOfBetaPairs[i] == pairs)
+			return 1;
+	}
+
+	return 0;
+}
+
+int AlphaNode::addBetaPair(BetaNode* pair)
+{
+	int isExist = checkExistPair(pair);
+	if (isExist)
+		return 1;
+	else {
+		listOfBetaPairs.push_back(pair);
+		return 1;
+	}
+	return -1;
+}
+
 void AlphaNode::testAlphaAndSaveHere(vector<pair<int, int>> test_cases)
 {
 	testRes = {};
@@ -86,4 +108,12 @@ bool AlphaNode::testDataType(string condition_test)
 		return false;
 	else
 		return true;
+}
+
+int AlphaNode::ResetNode()
+{
+	testRes = {};
+	listOfBetaPairs = {};
+	betaPair = NULL;
+	return 1;
 }

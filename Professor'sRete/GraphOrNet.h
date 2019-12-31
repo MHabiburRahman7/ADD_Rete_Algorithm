@@ -35,6 +35,13 @@ public:
 	int addBeta(string condition);
 	int addTerminal(string terminalName);
 
+	AlphaNode addAlphaAndReturn(string condition);
+	BetaNode addBetaAndReturn(string condition);
+
+	//Maybe it is useless
+	BetaNode addBetaAndReturn(AlphaNode* a1, AlphaNode* a2);
+	BetaNode addBetaAndReturn(AlphaNode* a1, BetaNode* b1);
+
 	//Delete Alpha or Beta
 	int deleteBeta(BetaNode);
 	int deleteAlpha(AlphaNode);

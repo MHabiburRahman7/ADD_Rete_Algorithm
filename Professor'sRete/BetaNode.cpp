@@ -44,12 +44,22 @@ int BetaNode::getID()
 
 int BetaNode::testBetaNode(vector<pair<int, int>> WME, vector<pair<int, int>> WME1)
 {
+	//previous codes
+	/*
 	if (leftSourceBool && rightSourceBool) {
 		for (int i = 0; i < WME.size(); i++) {
 			for (int j = i; j < WME1.size(); j++) {
 				if (WME[i].first == WME1[j].first)
 					testRes.push_back({ WME[i].first, thisProduct });
 			}
+		}
+	}
+	*/
+	//temp next version
+	if (leftSourceBool && rightSourceBool) {
+		for (int i = 0; i < WME.size(); i++) {
+			if (WME[i].first == WME1[i].first)
+				testRes.push_back({ WME[i].first, thisProduct });
 		}
 	}
 	return 0;
@@ -57,6 +67,7 @@ int BetaNode::testBetaNode(vector<pair<int, int>> WME, vector<pair<int, int>> WM
 
 int BetaNode::testBetaNode(vector<pair<int, string>> WME, vector<pair<int, int>> WME1)
 {
+	/*
 	if (leftSourceBool && rightSourceBool) {
 		for (int i = 0; i < WME.size(); i++) {
 			for (int j = i; j < WME1.size(); j++) {
@@ -64,18 +75,35 @@ int BetaNode::testBetaNode(vector<pair<int, string>> WME, vector<pair<int, int>>
 					testRes.push_back({ WME[i].first, thisProduct });
 			}
 		}
+	}*/
+
+	//temp next version
+	if (leftSourceBool && rightSourceBool) {
+		for (int i = 0; i < WME.size(); i++) {
+			if (WME[i].first == WME1[i].first)
+				testRes.push_back({ WME[i].first, thisProduct });
+		}
 	}
 	return 0;
 }
 
 int BetaNode::testBetaNode(vector<pair<int, string>> WME, vector<pair<int, string>> WME1)
 {
+	/*
 	if (leftSourceBool && rightSourceBool) {
 		for (int i = 0; i < WME.size(); i++) {
 			for (int j = i; j < WME1.size(); j++) {
 				if (WME[i].first == WME1[j].first)
 					testRes.push_back({ WME[i].first, thisProduct });
 			}
+		}
+	}*/
+
+	//temp next version
+	if (leftSourceBool && rightSourceBool) {
+		for (int i = 0; i < WME.size(); i++) {
+			if (WME[i].first == WME1[i].first)
+				testRes.push_back({ WME[i].first, thisProduct });
 		}
 	}
 	return 0;

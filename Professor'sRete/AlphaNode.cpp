@@ -99,6 +99,9 @@ void AlphaNode::testAlphaAndSaveHere(vector<pair<int, int>> test_cases)
 		else if (cases == 3 && test_cases[i].second > limit) {
 			testRes.push_back(test_cases[i]);
 		}
+		else {
+			testRes.push_back({ 0, 0 });
+		}
 	}
 }
 

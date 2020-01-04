@@ -88,11 +88,16 @@ int main() {
 				now_graph.tempFireWME(now_wm);
 				break;
 			}
+			case 11: {
+				cout << "Test BFS " << endl;
+				now_graph.testBFS(now_wm);
+			}
 			case 10: {
 				string temp, finalTerm;
 
 				vector<pair<string, string>> made;
 				cout << "Test the tokenizer " << endl;
+				cout << "Input the rules in this format <IF> <C1> <AND/OR> <C2> <THEN> <RESULT>" << endl;
 				cin.ignore();
 				getline(cin, temp);
 
@@ -116,7 +121,6 @@ int main() {
 						else {
 							finalTerm += made[i].second;
 						}
-						//terminal node
 					}
 
 					now_graph.addTerminal(finalTerm);
@@ -127,6 +131,9 @@ int main() {
 				else if (made.size() > 2) {
 					for (int i = 0; i < made.size(); i++) {
 						if (made[i].first == "Alpha") {
+							//if alpha is exist
+
+							//if alpha is not exist
 							now_graph.addAlpha(made[i].second);
 						}
 						strcpy(str, made[i].second.c_str());

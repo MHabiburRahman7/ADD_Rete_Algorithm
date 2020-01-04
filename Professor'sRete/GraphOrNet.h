@@ -25,6 +25,7 @@ public:
 
 	//FindMatch
 	vector<int> findMatch(WMSet temp_wm);
+	void testBFS(WMSet temp_wm);
 
 	//Fire
 	int tempFireWME(WMSet temp_wm);
@@ -67,5 +68,8 @@ public:
 	int findAlpha(string dataType);
 	int findBeta(string BCode);
 	int findBetaBasedOnProduct(string product);
+
+	AlphaNode * findAlphaAndReturnNode(string dataType);
+	BetaNode * findBetaBasedOnProductAndReturnNode(string product);
 };
 

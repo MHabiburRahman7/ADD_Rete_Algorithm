@@ -19,6 +19,8 @@ public:
 	string thisProduct;
 	string getType();
 
+	string leftSourceType, rightSourceType;
+
 	//Connected to beta and terminal what
 	BetaNode* betaPair;
 	TerminalNode* terminalPair;

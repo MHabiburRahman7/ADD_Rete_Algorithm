@@ -32,6 +32,8 @@ speed 2 22121
 2
 7
 
+-------------------------------------- new test case ---------------------------
+
 10
 if distance < 10000 and elevation < 12000 then danger_obj
 10

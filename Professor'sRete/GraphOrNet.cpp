@@ -195,6 +195,122 @@ vector<int> GraphOrNet::findMatch(WMSet temp_wm)
 	return possible_match;
 }
 
+void GraphOrNet::testBFS(WMSet temp_wm)
+{
+	vector<pair<BetaNode*, int>> visitedMark;
+	vector<AlphaNode*> pushedAlpha;
+	vector<BetaNode*> pushedBeta;
+
+	bool isDone = false;
+
+	for (int i = 0; i < temp_wm.data_content.size(); i++) {
+		for (int j = 0; j < alphaList.size(); j++) {
+			//test on alpha
+			if (temp_wm.data_content[i].first == alphaList[j].thisDataType) {
+				alphaList[j].testAlphaAndSaveHere(temp_wm.data_content[i].second);
+				//activate the beta
+				//searching all pair and activate it
+				for (int k = 0; k < alphaList[j].listOfBetaPairs.size(); k++) {
+					if (alphaList[j].listOfBetaPairs[k]->leftSourceBool == false)
+						alphaList[j].listOfBetaPairs[k]->leftSourceBool = true;
+					else
+						alphaList[j].listOfBetaPairs[k]->rightSourceBool = true;
+
+					//check for duplicate
+					bool isADuplicate = false;
+					for (int l = 0; l < pushedBeta.size(); l++) {
+						if (pushedBeta[l] == alphaList[j].listOfBetaPairs[k]) {
+							isADuplicate = true;
+							break;
+						}
+					}
+					if (!isADuplicate) {
+						pushedBeta.push_back(alphaList[j].listOfBetaPairs[k]);
+						visitedMark.push_back({ alphaList[j].listOfBetaPairs[k], 0 });
+					}
+					//pushedBeta.push_back(alphaList[j].listOfBetaPairs[k]);
+				}
+
+				break;
+			}
+		}
+	}
+	
+	while (!pushedBeta.empty()) {
+		
+		//for (int i = 0; i < pushedBeta.size(); i++) {
+		////for (auto i = pushedBeta.begin(); i != pushedBeta.end(); ++i) {
+		//	pushedBeta.erase(pushedBeta);
+		//	if (pushedBeta[i]->leftSourceBool && pushedBeta[i]->rightSourceBool) {
+		//		
+		//	}
+		//}
+
+		if (pushedBeta[0]->leftSourceBool && pushedBeta[0]->rightSourceBool) {
+
+			AlphaNode* leftA, * rightA;
+			BetaNode* leftB, * rightB;
+
+			//Decide the incoming left and right
+			if (pushedBeta[0]->leftSourceType == "Alpha" && pushedBeta[0]->rightSourceType == "Alpha") {
+				leftA = findAlphaAndReturnNode(pushedBeta[0]->leftSource);
+				rightA = findAlphaAndReturnNode(pushedBeta[0]->rightSource);
+
+				if(pushedBeta[0]->testRes.size() == 0)
+					pushedBeta[0]->testBetaNode(leftA->testRes, rightA->testRes);
+			}
+			else if (pushedBeta[0]->leftSourceType == "Beta" && pushedBeta[0]->rightSourceType == "Alpha") {
+				leftB = findBetaBasedOnProductAndReturnNode(pushedBeta[0]->leftSource);
+				rightA = findAlphaAndReturnNode(pushedBeta[0]->rightSource);
+				
+				if (pushedBeta[0]->testRes.size() == 0)
+					pushedBeta[0]->testBetaNode(leftB->testRes, rightA->testRes);
+			}
+			else if (pushedBeta[0]->leftSourceType == "Beta" && pushedBeta[0]->rightSourceType == "Beta") {
+				leftB = findBetaBasedOnProductAndReturnNode(pushedBeta[0]->leftSource);
+				rightB = findBetaBasedOnProductAndReturnNode(pushedBeta[0]->rightSource);
+
+				if (pushedBeta[0]->testRes.size() == 0)
+					pushedBeta[0]->testBetaNode(leftB->testRes, rightB->testRes);
+			}
+
+			//Activate successor node
+			for (int i = 0; i < pushedBeta[0]->listOfBetaPair.size(); i++) {
+				if (pushedBeta[0]->betaPair[i].leftSourceBool == false)
+					pushedBeta[0]->betaPair[i].leftSourceBool = true;
+				else
+					pushedBeta[0]->betaPair[i].rightSourceBool = true;
+
+				pushedBeta.push_back(&pushedBeta[0]->betaPair[i]);
+			}
+
+			//Mark the current node in visited mark
+			for (int i = 0; i < visitedMark.size(); i++) {
+				if (visitedMark[i].first == pushedBeta[0]) {
+					visitedMark[i].second++;
+
+					if (visitedMark[i].second >= 3)
+						isDone = true;
+					break;
+				}
+			}
+		}
+
+		pushedBeta.erase(pushedBeta.begin());
+
+		if (isDone)
+			break;
+		//evaluate visited mark
+		//for (int i = 0; i < visitedMark.size(); i++) {
+		//	if (visitedMark[i].second >= 3)
+		//		break;
+		//}
+	}
+
+	int b;
+
+}
+
 int GraphOrNet::tempFireWME(WMSet temp_wm)
 {
 	//This is not the final version
@@ -304,8 +420,16 @@ int GraphOrNet::connectTwoInputNode(AlphaNode &a1, AlphaNode &a2, BetaNode &b1)
 	//adjAlphaBeta.push_back({ &a1, &b1 });
 	//adjAlphaBeta.push_back({ &a2, &b1 });
 
+	if (b1.leftSourceType != "" || b1.rightSourceType != "") {
+		cout << "ALERT :" << b1.thisProduct << " IS ALREADY OCCUPIED SOURCE" << endl;
+		return -1;
+	}
+
 	a1.addBetaPair(&b1);
 	a2.addBetaPair(&b1);
+	b1.leftSourceType = "Alpha";
+	b1.rightSourceType = "Alpha";
+
 
 	a1.betaPair = &b1;
 	a2.betaPair = &b1;
@@ -318,8 +442,15 @@ int GraphOrNet::connectTwoInputNode(BetaNode &b1, AlphaNode &a2, BetaNode &b2)
 	//adjAlphaBeta.push_back({ &a2, &b2 });
 	//adjBetaBeta.push_back({ &b1, &b2 });
 
+	if (b2.leftSourceType != "" || b2.rightSourceType != "") {
+		cout << "ALERT :" << b2.thisProduct << " IS ALREADY OCCUPIED SOURCE" << endl;
+		return -1;
+	}
+
 	b1.addBetaPair(&b2);
 	a2.addBetaPair(&b2);
+	b2.leftSourceType = "Beta";
+	b2.rightSourceType = "Alpha";
 
 	//Back to linked list
 	a2.betaPair = &b2;
@@ -333,8 +464,16 @@ int GraphOrNet::connectTwoInputNode(BetaNode &b1, BetaNode &b2, BetaNode &b3)
 	//adjBetaBeta.push_back({ &b1, &b3 });
 	//adjBetaBeta.push_back({ &b2, &b3 });
 
+	if (b3.leftSourceType != "" || b3.rightSourceType != "") {
+		cout << "ALERT :" << b3.thisProduct << " IS ALREADY OCCUPIED SOURCE" << endl;
+		return -1;
+	}
+
 	b1.addBetaPair(&b3);
 	b2.addBetaPair(&b3);
+	b3.leftSourceType = "Beta";
+	b3.rightSourceType = "Beta";
+
 
 	b1.betaPair = &b3;
 	b2.betaPair = &b3;
@@ -355,19 +494,22 @@ int GraphOrNet::buildCurrentAlphaBeta()
 {
 	//alpha to beta & beta to beta
 	for (int i = 0; i < betaList.size(); i++) {
+		//Will be depreciated soon
 		int alpha1 = -1, alpha2 = -1;
-		int beta1 = -1;
+		int beta1 = -1, beta2 = -1;
 		alpha1 = findAlpha(betaList[i].leftSource);
 		alpha2 = findAlpha(betaList[i].rightSource);
 
 		//Banyak kemungkinan beta nih. Ya bikin aja satu2
-		beta1 = findBeta(betaList[i].leftSource);
-		if(beta1 == -1)
-			beta1 = findBeta(betaList[i].rightSource);
-		if (beta1 == -1)
+		if (alpha1 == -1 || alpha2 == -1) { // pasti salah satunya beta
 			beta1 = findBetaBasedOnProduct(betaList[i].leftSource);
-		if (beta1 == -1)
-			beta1 = findBetaBasedOnProduct(betaList[i].rightSource);
+			if (beta1 == -1)
+				beta1 = findBetaBasedOnProduct(betaList[i].rightSource);
+		}
+		else if (alpha1 == -1 && alpha2 == -1) { // keduanya beta
+			beta1 = findBetaBasedOnProduct(betaList[i].leftSource);
+			beta2 = findBetaBasedOnProduct(betaList[i].rightSource);
+		}
 
 		if (alpha1 != -1 && alpha2 != -1) // alpha 1 and 2 is alpha node
 			//connectNodeAlphaToBeta(alphaList[alpha1], alphaList[alpha2], betaList[i]);
@@ -381,6 +523,45 @@ int GraphOrNet::buildCurrentAlphaBeta()
 		else
 			continue;
 	}
+	
+	
+	//bikin saingannya
+	/*
+	for (int i = 0; i < betaList.size(); i++) {
+		//Lets work on this
+		AlphaNode* alpha1A, * alpha2A;
+		BetaNode* beta1B, * beta2B;
+		alpha1A = findAlphaAndReturnNode(betaList[i].leftSource);
+		alpha2A = findAlphaAndReturnNode(betaList[i].rightSource);
+
+		//Banyak kemungkinan beta nih. Ya bikin aja satu2
+		if (alpha1A == nullptr|| alpha2A == nullptr) { // pasti salah satunya beta
+			beta1B = findBetaBasedOnProductAndReturnNode(betaList[i].leftSource);
+			if (beta1B == nullptr)
+				beta2B = findBetaBasedOnProductAndReturnNode(betaList[i].rightSource);
+		}
+		else if (alpha1A == nullptr && alpha2A == nullptr) { // keduanya beta
+			beta1B = findBetaBasedOnProductAndReturnNode(betaList[i].leftSource);
+			beta2B = findBetaBasedOnProductAndReturnNode(betaList[i].rightSource);
+		}
+
+		if (alpha1A != nullptr && alpha2A != nullptr) // left and right is alpha node
+			connectTwoInputNode(*alpha1A, *alpha2A, betaList[i]);
+		else if (alpha1A == nullptr && alpha2A != nullptr) { // left is beta right is alpha
+			//if(beta1B == nullptr)
+				connectTwoInputNode(*beta1B, *alpha1A, betaList[i]);
+			//else
+			//	connectTwoInputNode(*beta2B, *alpha1A, betaList[i]);
+		}
+		else if (alpha1A != nullptr && alpha2A == nullptr) // alpha 2 is beta
+			//connectNodeAlphaToBeta(alphaList[alpha1], betaList[beta1], betaList[i]);
+			connectTwoInputNode(*beta2B, *alpha1A, betaList[i]);
+		else if(alpha1A == nullptr && alpha2A == nullptr) // both beta
+			connectTwoInputNode(*beta1B, *beta2B, betaList[i]);
+		else
+			continue;
+	}
+	*/
 
 	//beta to terminal
 	for (int i = 0; i < termList.size(); i++) {
@@ -438,6 +619,24 @@ int GraphOrNet::findAlpha(string dataType)
 			return i;
 	}
 	return -1;
+}
+
+AlphaNode * GraphOrNet::findAlphaAndReturnNode(string dataType)
+{
+	for (int i = 0; i < alphaList.size(); i++) {
+		if (strcmp(alphaList[i].thisDataType.c_str(), dataType.c_str()) == 0)
+			return &alphaList[i];
+	}
+	return nullptr;
+}
+
+BetaNode * GraphOrNet::findBetaBasedOnProductAndReturnNode(string product)
+{
+	for (int i = 0; i < betaList.size(); i++) {
+		if (strcmp(betaList[i].thisProduct.c_str(), product.c_str()) == 0)
+			return &betaList[i];
+	}
+	return nullptr;
 }
 
 int GraphOrNet::findBeta(string BCode)
